@@ -1,0 +1,144 @@
+---
+title: "Fractal snowflakes"
+author: "Jasmine"
+date: "23/11/2019"
+output: html_document
+---
+
+```{r packages}
+library(emo)
+```
+
+# Making Fractal Snowflakes `r emo::ji("snowflake")`
+
+## Making the base of the snowflake
+
+Picking the arms of the snowflake
+- make a list of numbers 
+```{r sides}
+nsides <- 6
+
+rep(0,nsides)
+
+xstart <- rep(0,nsides)
+ystart <- rep(0,nsides)
+```
+
+
+## angle of seperation between lines
+```{r angle}
+angle <- 60
+
+firstangle <- 360/nsides*pi/180
+angle <- angle*pi/180
+```
+
+## where to plot the end of your line
+- think back to SOH CAH TOA
+```{r}
+xend <- sin(firstangle*(1:nsides)) # sin = opp/hyp , OPPOSITE
+yend <- cos(firstangle*(1:nsides)) # cos = adj/hyp , ADJACENT
+```
+
+## plot it!
+
+```{r}
+plot.new()
+# making an empty rectangle to plot on
+plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="",
+       xaxt='n', yaxt='n', asp=1)
+# plot your lines in to make a *
+segments(xstart, ystart, xend, yend)
+```
+
+
+# making this a function
+```{r}
+snowflake_basic <- function(n, nsides=6, angle=60, wherebranch=0.5) {
+  #draws plot background
+  plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="",
+       xaxt='n', yaxt='n', asp=1)
+  
+  #making the arms of the snowflake
+  xstart <- rep(0,nsides)
+  ystart <- rep(0,nsides)
+  
+  #seperation
+  firstangle <- 360/nsides*pi/180
+  angle <- angle*pi/180
+  
+  #where to plot the end of the line
+  #think back to SOH CAH TOA
+  xend <- sin(firstangle*(1:nsides)) # sin = opp/hyp , OPPOSITE
+  yend <- cos(firstangle*(1:nsides)) # cos = adj/hyp , ADJACENT
+  
+  segments(xstart, ystart, xend, yend)
+}
+
+snowflake_basic()
+```
+
+## improving on the snowflake base
+```{r}
+snowflake <- function(n, nsides=6, angle=60, wherebranch=0.5) {
+  plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="", xaxt='n', yaxt='n', asp=1)
+  xstart <- rep(0,nsides)
+  ystart <- rep(0,nsides)
+  firstangle <- 360/nsides*pi/180
+  angle <- angle*pi/180
+  xend <- sin(firstangle*(1:nsides))
+  yend <- cos(firstangle*(1:nsides))
+  
+  last_ang <- firstangle*(1:nsides)                                                     ########
+  
+  segments(xstart, ystart, xend, yend)
+  for(i in 2:n) {
+    end_l <- (1-wherebranch)^(i-1)                                                      ########
+    
+    xstart <- rep(xstart + wherebranch*(xend-xstart),3)
+    ystart <- rep(ystart + wherebranch*(yend-ystart),3)
+    
+    xend <- xstart + end_l*c(sin(last_ang-angle), sin(last_ang), sin(last_ang+angle))   ########
+    yend <- ystart + end_l*c(cos(last_ang-angle), cos(last_ang), cos(last_ang+angle))   ########
+    
+    last_ang <- c(last_ang-angle, last_ang, last_ang+angle)                             ########
+    
+    segments(xstart, ystart, xend, yend)                                                ########
+  }
+}
+
+snowflake(6)
+```
+
+## coloured snowflake
+```{r}
+snowflake_c <- function(n, nsides=6, angle=60, wherebranch=0.5, color=T, ...) {
+  plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="", xaxt='n', yaxt='n', asp=1, ...=...)
+  xstart <- rep(0,nsides)
+  ystart <- rep(0,nsides)
+  firstangle <- 360/nsides*pi/180
+  angle <- angle*pi/180
+  xend <- sin(firstangle*(1:nsides))
+  yend <- cos(firstangle*(1:nsides))
+  last_ang <- firstangle*(1:nsides)
+  if(color) cols <- rainbow(n)
+  else cols <- rep(1,n)
+  segments(xstart, ystart, xend, yend, col=cols[1])
+  for(i in 2:n) {
+    end_l <- (1-wherebranch)^(i-1)
+    xstart <- rep(xstart + wherebranch*(xend-xstart),3)
+    ystart <- rep(ystart + wherebranch*(yend-ystart),3)
+    xend <- xstart + end_l*c(sin(last_ang-angle), sin(last_ang), sin(last_ang+angle))
+    yend <- ystart + end_l*c(cos(last_ang-angle), cos(last_ang), cos(last_ang+angle))
+    last_ang <- c(last_ang-angle, last_ang, last_ang+angle)
+    segments(xstart, ystart, xend, yend, col=cols[i])
+  }
+}
+
+snowflake_c(9, angle=70, wherebranch=.45, main="FRACTAL SNOWFLAKE!!")
+```
+
+
+# Acknowledgements
+- [Matt Tylers Tutorial](http://rpubs.com/mbtyers/239517)
+- [Matt Tylers shiny app](https://mbtyers.shinyapps.io/snowflake/)
