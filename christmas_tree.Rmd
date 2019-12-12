@@ -12,7 +12,9 @@ library(dplyr)
 ```
 
 
+## Making the tree with base R
 
+This code is adapted from RLadies Baltimore: https://rladies-baltimore.github.io/post/making-holiday-cards-in-r-2018/
 ```{r baseR,fig.height=8,figh.width=4}
 
 ## Make the canvas
@@ -44,6 +46,8 @@ for(i in 1:10){
 
 ```
 
+
+## Making the tree with ggplot instead
 
 ```{r ggplot, fig.height=6,figh.width=4,warning=FALSE}
 
@@ -97,7 +101,6 @@ pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shap
 
 #Add some ornaments on each branch
 ornaments <- data.frame(x=runif(4,-4,4),y=rep(3.5,4),col=sample(c("blue","red")))
-##change the shape to change the ornament shape
 pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shape=21)
 
 
@@ -113,11 +116,15 @@ pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shap
 
 ###add the star
 star <- data.frame(x=0,y=7.5)
-pl + geom_point(data=star,aes(x=x,y=y),shape=11,col="gold",size=5,stroke=4)
+pl <- pl + geom_point(data=star,aes(x=x,y=y),shape=11,col="gold",size=5,stroke=4)
 
 # Add some presents
 
 
 ```
 
+##Some potential challenges
 
+ * Add the presents with the ggplot version 
+ * Make the ornaments blink with gganimate
+ * Change the ornaments shape
