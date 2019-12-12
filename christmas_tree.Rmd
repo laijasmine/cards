@@ -1,0 +1,123 @@
+---
+title: "christmasTree"
+author: "Hatfield Consultants"
+date: "12/12/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+```
+
+
+
+```{r baseR,fig.height=8,figh.width=4}
+
+## Make the canvas
+plot(1:10,1:10,xlim=c(-5,5),ylim=c(0,10),type="n",xlab="",ylab="",xaxt="n",yaxt="n")
+
+
+# Make the branches
+rect(-1,0,1,2,col="tan3",border="tan4",lwd=3)
+polygon(c(-5,0,5),c(2,4,2),col="palegreen3",border="palegreen4",lwd=3)
+polygon(c(-4,0,4),c(3.5,5.5,3.5),col="palegreen4",border="palegreen3",lwd=3)
+polygon(c(-3,0,3),c(5,6.5,5),col="palegreen3",border="palegreen4",lwd=3)
+polygon(c(-2,0,2),c(6.25,7.5,6.25),col="palegreen4",border="palegreen3",lwd=3)
+
+#Add some ornaments
+points(x=runif(4,-5,5),y=rep(2,4),col=sample(c("blue","red"),size=4,replace=T),cex=3,pch=19)
+points(x=runif(4,-4,4),y=rep(3.5,4),col=sample(c("blue","red"),size=4,replace=T),cex=3,pch=19)
+points(x=runif(4,-3,3),y=rep(5,4),col=sample(c("blue","red"),size=4,replace=T),cex=3,pch=19)
+points(x=runif(4,-2,2),y=rep(6.25,4),col=sample(c("blue","red"),size=4,replace=T),cex=3,pch=19)
+points(0,7.5,pch=8,cex=5,col="gold",lwd=3)
+
+# Add some presents
+xPres = runif(10,-4.5,4.5)
+xWidth = runif(10,0.1,0.5)
+xHeight=runif(10,0,1)
+for(i in 1:10){
+  rect(xPres[i]-xWidth[i],0,xPres[i]+xWidth[i],xHeight[i],col=sample(c("blue","red"),size=1))
+  rect(xPres[i]-0.2*xWidth[i],0,xPres[i]+0.2*xWidth[i],xHeight[i],col=sample(c("gold","grey87"),size=1))
+}
+
+```
+
+
+```{r ggplot, fig.height=6,figh.width=4,warning=FALSE}
+
+## Make the canvas
+pl <- ggplot() +
+        theme_void()
+
+# Make the trunk
+trunk <- data.frame(
+  id =  "trunk",
+  x = c(-1, 1, 1, -1),
+  y = c(0, 0, 2,2)
+)
+
+pl <- pl + geom_polygon(data=trunk, aes(x = x, y = y),fill="tan3",color="tan4")
+
+# Make the branches
+branch1 <- data.frame(
+  id =  "branch1",
+  x = c(-5,0,5),
+  y = c(2,4,2)
+)
+
+branch2 <- data.frame(
+  id =  "branch2",
+  x = c(-4,0,4),
+  y = c(3.5,5.5,3.5)
+)
+
+branch3 <- data.frame(
+  id =  "branch3",
+  x =c(-3,0,3),
+  y = c(5,6.5,5)
+)
+
+branch4 <- data.frame(
+  id =  "branch4",
+  x =c(-2,0,2),
+  y = c(6.25,7.5,6.25)
+)
+
+#combine all the branches
+branches <- bind_rows(branch1,branch2,branch3,branch4)
+
+pl <- pl + geom_polygon(data=branches,aes(x=x,y=y,group=id),fill="palegreen3",color="palegreen4")
+
+#Add some ornaments on the lowest branch
+ornaments <- data.frame(x=runif(4,-5,5),y=rep(2,4),col=sample(c("blue","red")))
+##change the shape to change the ornament shape
+pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shape=21)
+
+#Add some ornaments on each branch
+ornaments <- data.frame(x=runif(4,-4,4),y=rep(3.5,4),col=sample(c("blue","red")))
+##change the shape to change the ornament shape
+pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shape=21)
+
+
+#Add some ornaments on each branch
+ornaments <- data.frame(x=runif(4,-3,3),y=rep(5,4),col=sample(c("blue","red")))
+##change the shape to change the ornament shape
+pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shape=21)
+
+###Add some ornaments on each branch
+ornaments <- data.frame(x=runif(4,-2,2),y=rep(6.25,4),col=sample(c("blue","red")))
+##change the shape to change the ornament shape
+pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shape=21)
+
+###add the star
+star <- data.frame(x=0,y=7.5)
+pl + geom_point(data=star,aes(x=x,y=y),shape=11,col="gold",size=5,stroke=4)
+
+# Add some presents
+
+
+```
+
+
