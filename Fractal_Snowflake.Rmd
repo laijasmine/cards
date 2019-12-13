@@ -35,14 +35,14 @@ angle <- angle*pi/180
 
 ## where to plot the end of your line
 - think back to SOH CAH TOA
-```{r}
+```{r making lines}
 xend <- sin(firstangle*(1:nsides)) # sin = opp/hyp , OPPOSITE
 yend <- cos(firstangle*(1:nsides)) # cos = adj/hyp , ADJACENT
 ```
 
 ## plot it!
 
-```{r}
+```{r plotting}
 plot.new()
 # making an empty rectangle to plot on
 plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="",
@@ -53,7 +53,7 @@ segments(xstart, ystart, xend, yend)
 
 
 # making this a function
-```{r}
+```{r function}
 snowflake_basic <- function(n, nsides=6, angle=60, wherebranch=0.5) {
   #draws plot background
   plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="",
@@ -79,7 +79,7 @@ snowflake_basic()
 ```
 
 ## improving on the snowflake base
-```{r}
+```{r improvement}
 snowflake <- function(n, nsides=6, angle=60, wherebranch=0.5) {
   plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="", xaxt='n', yaxt='n', asp=1)
   xstart <- rep(0,nsides)
@@ -111,7 +111,7 @@ snowflake(6)
 ```
 
 ## coloured snowflake
-```{r}
+```{r colour}
 snowflake_c <- function(n, nsides=6, angle=60, wherebranch=0.5, color=T, ...) {
   plot(NA, xlim=c(-1,1), ylim=c(-1,1), xlab="", ylab="", xaxt='n', yaxt='n', asp=1, ...=...)
   xstart <- rep(0,nsides)
