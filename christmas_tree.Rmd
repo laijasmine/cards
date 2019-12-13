@@ -1,6 +1,6 @@
 ---
 title: "christmasTree"
-author: "Hatfield Consultants"
+author: "Raissa Philibert"
 date: "12/12/2019"
 output: html_document
 ---
@@ -15,6 +15,7 @@ library(dplyr)
 ## Making the tree with base R
 
 This code is adapted from RLadies Baltimore: https://rladies-baltimore.github.io/post/making-holiday-cards-in-r-2018/
+
 ```{r baseR,fig.height=8,figh.width=4}
 
 ## Make the canvas
@@ -118,7 +119,17 @@ pl <- pl + geom_point(data=ornaments,aes(x=x,y=y),fill=ornaments$col,size=4,shap
 star <- data.frame(x=0,y=7.5)
 pl <- pl + geom_point(data=star,aes(x=x,y=y),shape=11,col="gold",size=5,stroke=4)
 
+
+pl
 # Add some presents
+# Add some presents
+xPres = runif(10,-4.5,4.5)
+xWidth = runif(10,0.1,0.5)
+xHeight=runif(10,0,1)
+for(i in 1:10){
+  rect(xPres[i]-xWidth[i],0,xPres[i]+xWidth[i],xHeight[i],col=sample(c("blue","red"),size=1))
+  rect(xPres[i]-0.2*xWidth[i],0,xPres[i]+0.2*xWidth[i],xHeight[i],col=sample(c("gold","grey87"),size=1))
+}
 
 
 ```
